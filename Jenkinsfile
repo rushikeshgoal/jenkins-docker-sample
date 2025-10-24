@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        # Jenkins मध्ये add केलेले DockerHub credentials ID = 'dockerhub'
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')  
+        // Jenkins मध्ये add केलेले DockerHub credentials ID = 'dockerhub'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         IMAGE_NAME = "rushikeshdoc/sample-app"   // DockerHub username/repo
         IMAGE_TAG  = "latest"
     }
@@ -31,10 +31,10 @@ pipeline {
             echo "Pipeline finished"
         }
         success {
-            echo "Docker image pushed successfully!"
+            echo "✅ Docker image pushed successfully!"
         }
         failure {
-            echo "Pipeline failed! Check console output."
+            echo "❌ Pipeline failed! Check console output."
         }
     }
 }
