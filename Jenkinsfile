@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
-        IMAGE_NAME = "rushikeshgoal/sample-app"
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
+    IMAGE_NAME = "rushikeshdoc/sample-app"   
+}
+
     }
 
     stages {
