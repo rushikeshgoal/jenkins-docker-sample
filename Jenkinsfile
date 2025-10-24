@@ -1,40 +1,34 @@
 pipeline {
     agent any
+
     environment {
-        // Jenkins मध्ये add केलेले DockerHub credentials ID = 'dockerhub'
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        IMAGE_NAME = "rushikeshdoc/sample-app"   // DockerHub username/repo
-        IMAGE_TAG  = "latest"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
+        IMAGE_NAME = "rushikeshgoal/sample-app"
     }
+
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker image $IMAGE_NAME:$IMAGE_TAG"
-                sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
+
         stage('Login to DockerHub') {
             steps {
-                echo "Logging in to DockerHub as rushikeshdoc"
-                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        stage('Push Docker Image') {
+
+        stage('Push to DockerHub') {
             steps {
-                echo "Pushing Docker image to DockerHub"
-                sh "docker push $IMAGE_NAME:$IMAGE_TAG"
+                sh 'docker push $IMAGE_NAME'
             }
-        }
-    }
-    post {
-        always {
-            echo "Pipeline finished"
-        }
-        success {
-            echo "✅ Docker image pushed successfully!"
-        }
-        failure {
-            echo "❌ Pipeline failed! Check console output."
         }
     }
 }
